@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Donna – Student Tax Refund</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lustria&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* =====================
+       Global / Landing CSS
+       ===================== */
+    :root{
+      --text:#222;
+      --muted:#6b6b6b;
+      --pink:#ff0583; /* close to #ff0099 but unified */
+      --stroke:#dcdcdc;
+      --bg:#ffffff;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0; background:var(--bg); color:var(--text);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji", "Segoe UI Symbol";
+      line-height:1.35;
+    }
+
+    /* Header */
+    header{
+      position:sticky; top:0; z-index:10;
+      background:rgba(255,255,255,.92);
+      backdrop-filter:saturate(140%) blur(8px);
+      border-bottom:1px solid #f1f1f1;
+    }
+    .bar{
+      max-width:1200px; margin:0 auto; padding:14px 20px;
+      display:grid; grid-template-columns:1fr auto 1fr; align-items:center;
+    }
+    .logo{
+      font-family: "Lustria", Georgia, serif; font-size:28px; font-weight:400; color:#2b2b2b;
+      letter-spacing:.2px; justify-self:center;
+    }
+    .nav-cta{
+      justify-self:end;
+      padding:10px 16px; border-radius:6px; border:1px solid #f2a5c8; color:#a30e5d; background:#fff;
+      text-decoration:none; font-weight:600; font-size:14px;
+    }
+
+    /* Hero (from landing) */
+    .hero {
+      position: relative; overflow: hidden; min-height: 620px;
+      background: url("background.png") no-repeat center bottom; background-size: cover; background-color:#fff;
+    }
+    .hero-wrap{ max-width:1100px; margin:0 auto; padding:64px 20px 150px; text-align:center; }
+    .hero h1{ font-family:"Lustria", Georgia, serif; font-weight:400; margin:18px auto 12px; font-size:clamp(34px, 5.6vw, 68px); line-height:1.05; letter-spacing:.2px; max-width:720px; color:#3a3a3a; }
+    .hero .sub{ color:#6b6b6b; font-size:18px; font-weight:400; font-family: Inter, system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif; max-width:720px; margin:0 auto 34px; line-height:1.5; letter-spacing:.2px; }
+    .cta{ display:inline-block; border:0; padding:18px 36px; border-radius:8px; font-size:18px; font-weight:700;
+      background:var(--pink); color:white; box-shadow:0 10px 24px rgba(255,5,131,.28), 0 4px 10px rgba(0,0,0,.08);
+      transform:translateZ(0); user-select:none; cursor:pointer; text-decoration:none;
+    }
+    .trust-row{ margin-top:22px; color:#666; font-size:14px; }
+
+    /* Anchor spacer */
+    .spacer{ height:40vh; }
+
+    /* =====================
+       App (from product file)
+       Namespaced minimal to avoid clashes
+       ===================== */
+    .app-container{ max-width:500px; margin:0 auto; padding:40px 20px; }
+
+    /* Reuse existing app styles with light tweaks */
+    .app .container{max-width:500px;margin:0 auto;padding:40px 20px;text-align:center}
+    .app .icon{width:80px;height:80px;border-radius:50%;background:#ff0099;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;color:#fff;font-size:26px}
+    .app .icon-img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+    .app h1{font-family: 'Lustria', Georgia, 'Times New Roman', serif;font-weight:400;font-size:1.9rem;line-height:1.25;letter-spacing:.2px;margin-bottom:10px;color:#222;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+    .app p.sub{color:#666;font-size:.95rem;margin-bottom:30px;font-family: 'Inter','Helvetica Neue',Arial,sans-serif}
+
+    .app .option{border:2px solid #ddd;border-radius:10px;padding:15px;margin-bottom:15px;text-align:left;display:flex;align-items:flex-start;gap:12px;cursor:pointer;transition:border-color .2s;background:#fff}
+    .app .option input{margin-top:4px;accent-color:#ff0099}
+    .app .option.active{border-color:#ff0099;background:#fff5fa}
+    .app .option-title{font-size:1rem;font-weight:600}
+    .app .option-desc{font-size:.85rem;color:#777}
+
+    .app .input-area{margin:20px 0;text-align:left}
+    .app .input-area label{display:block;margin-bottom:6px;font-size:.9rem;color:#444}
+    .app .input-area input, .app .input-area select, .app .input-area textarea{width:100%;padding:12px;border:1px solid #ccc;border-radius:8px;font-size:1rem;box-sizing:border-box}
+    .app .input-hint{margin-top:6px;font-size:.8rem;color:#888}
+
+    .app .upload-box{margin-top:14px;margin-bottom:18px}
+    .app .upload-area{display:block;border:2px dashed #ff0099;border-radius:10px;padding:22px 16px;background:#fff5fa;text-align:center;cursor:pointer;transition:background .2s,border-color .2s}
+    .app .upload-area.dragover{background:#ffe0f0;border-color:#e60088}
+    .app .upload-icon{font-size:36px;color:#ff0099;margin-bottom:8px}
+    .app .upload-area p{margin:5px 0;color:#555;font-size:.95rem}
+    .app .upload-sub{font-size:.8rem;color:#777}
+    .app .upload-btn{display:inline-block;margin-top:10px;padding:8px 14px;background:#ff0099;color:#fff;font-weight:bold;border-radius:6px}
+
+    .app .inline-link{display:inline-block;margin-top:10px;font-size:.95rem;color:#3b71ca;text-decoration:underline;background:none;border:none;cursor:pointer;padding:0}
+    .app .hint-row{color:#8a8a8a;font-size:.9rem;margin-top:8px}
+    .app #continueBtn4{margin-top:16px}
+
+    .app button{width:100%;padding:15px;font-size:1rem;font-weight:bold;border:none;border-radius:8px;cursor:not-allowed;background:#ccc;color:#fff;transition:background .3s}
+    .app button.active{background:#ff0099;cursor:pointer}
+    .app button.active:hover{background:#e60088}
+
+    .app .screen{display:none}
+    .app .screen.active{display:block}
+
+    .app .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:#ff0099;color:#fff;padding:12px 16px;border-radius:999px;font-size:.95rem;box-shadow:0 8px 24px rgba(255,0,153,.35);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;display:flex;align-items:center;gap:10px;z-index:9999}
+    .app .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    .app .toast.success,.app .toast.info,.app .toast.warn{background:#ff0099}
+
+    .app .refund-card{background:#fff;border:2px solid #ffd1e8;border-radius:16px;padding:22px 18px;margin-top:10px}
+    .app .refund-amount{font-size:2.2rem;font-weight:800;letter-spacing:.5px;margin:6px 0 8px}
+    .app .refund-amount .range{display:block;font-size:2.6rem}
+    .app .micro{color:#777;font-size:.9rem;margin-bottom:12px}
+    .app .highlights{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:8px 0 14px}
+    .app .triple-note{background:#fff5fa;border:1px dashed #ffb8dd;border-radius:12px;padding:10px 12px;font-size:.9rem;color:#444;margin:6px 0 12px}
+    .app .chip{background:#fff5fa;border:1px solid #ffcae4;border-radius:999px;padding:6px 10px;font-size:.85rem;color:#444}
+    .app .disclaimer{color:#888;font-size:.8rem;margin-top:10px}
+
+    .app .fade-in{opacity:0;transform:translateY(6px);animation:fadeIn .5s ease forwards}
+    @keyframes fadeIn{to{opacity:1;transform:translateY(0)}}
+    .app .pulse{animation:pulseBtn 1.2s ease 1s 2}
+    @keyframes pulseBtn{0%{transform:scale(1)}50%{transform:scale(1.03)}100%{transform:scale(1)}}
+
+    .app .confetti{position:fixed;top:-10px;left:0;width:100%;pointer-events:none;z-index:9998}
+    .app .confetti span{position:absolute;top:-10px;width:8px;height:14px;background:#ff0099;opacity:.9;border-radius:2px;animation:fall 2.4s linear forwards}
+    .app .confetti span:nth-child(3n){background:#ff6fb6}
+    .app .confetti span:nth-child(5n){background:#ffa6d1;height:10px}
+    @keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
+
+    /* Section divider */
+    .divider{height:1px;background:#f1f1f1;margin:0}
+
+    @media (max-width:720px){
+  .hero{ 
+    min-height:520px; 
+    background-image: url('mobilebackground.png');
+    background-size: cover;            /* default: fill and crop if needed */
+    background-position: center 10%;   /* מיקוד קצת יותר גבוה */
+  }
+  .hero-wrap{ padding-bottom:120px; }
+}
+
+/* במכשירים צרים במיוחד – עדיפות לראות את כל האיור בלי חיתוך */
+@media (max-width:430px){
+  .hero{
+    background-size: contain;          /* מציג את כל התמונה */
+    background-repeat: no-repeat;
+    background-position: center bottom; /* שמור את הדמות בתחתית */
+    background-color:#fff;              /* ממלא את השוליים הריקים, אם יהיו */
+    min-height:560px;
+  }
+}
+  .hero-wrap{ padding-bottom:120px; }
+}
+      .hero-wrap{ padding-bottom:120px; }
+    }
+    /* App look & feel like original */
+    body.app-mode{ background:#f9f9fb; font-family:"Helvetica Neue",Helvetica,Arial,sans-serif; color:#222; }
+  </style>
+</head>
+<body>
+  <!-- Landing header -->
+  <header>
+    <div class="bar">
+      <div></div>
+      <div class="logo" aria-label="Brand">Donna</div>
+      
+    </div>
+  </header>
+
+  <!-- Hero / Landing -->
+  <main id="landing" class="hero">
+    <div class="hero-wrap">
+      <h1>Get your student tax refund in minutes</h1>
+      <p class=\"sub">Fast. Simple. Secure.</p>
+      <a href="#" id="ctaStart" class="cta">Start your refund</a>
+      
+    </div>
+  </main>
+
+  <div class="divider"></div>
+
+  <!-- App Section (embedded original flow) -->
+  <section id="app" class="app" style="display:none;">
+    <div class="container app-container">
+      <!-- Screen 1: Tuition -->
+      <div id="screen1" class="screen active">
+        <div class="icon"><img class="icon-img" src="donna.png" alt="Donna assistant"></div>
+        <h1 style="font-size:1.33rem;">Hey! I’m Donna.</h1>
+        <h1 style="margin-top:6px;">How much did you pay for school this year?</h1>
+        <div class="option" id="optUpload">
+          <input type="radio" name="tuitionOption" value="upload">
+          <div><div class="option-title">Upload your 1098-T</div><div class="option-desc">Fastest and most accurate</div></div>
+        </div>
+        <div class="option" id="optManual">
+          <input type="radio" name="tuitionOption" value="manual">
+          <div><div class="option-title">I don’t have the form now</div><div class="option-desc">I’ll enter an estimate</div></div>
+        </div>
+
+        <!-- Upload box -->
+        <div id="uploadField" class="upload-box" style="display:none;">
+          <label for="fileUpload" class="upload-area" id="uploadArea">
+            <div class="upload-icon">📄</div>
+            <p id="uploadPrompt">Drag & drop or click to upload your 1098-T</p>
+            <p class="upload-sub" id="uploadSub">PDF/JPG/PNG · up to 10 MB</p>
+            <span class="upload-btn" id="uploadBtnLabel">Choose file</span>
+            <p class="upload-sub" id="uploadFileName" style="display:none;margin-top:10px;"></p>
+          </label>
+          <input type="file" id="fileUpload" accept=".pdf,.jpg,.png" hidden>
+        </div>
+
+        <!-- Manual entry -->
+        <div id="manualField" class="input-area" style="display:none;">
+          <label for="tuitionAmount">How much did you pay this year? (USD)</label>
+          <input type="number" id="tuitionAmount" placeholder="15,000">
+          <div class="input-hint">It doesn’t have to be exact – just an estimate.</div>
+        </div>
+
+        <button id="continueBtn1">Continue</button>
+      </div>
+
+      <!-- Screen 2: Dependent -->
+      <div id="screen2" class="screen">
+        <div class="icon"><img class="icon-img" src="donna.png" alt="Donna assistant"></div>
+        <h1>Are you listed on your parents’ taxes?</h1>
+
+        <div class="option" id="depYes">
+          <input type="radio" name="depOption" value="yes"><div><div class="option-title">Yes</div></div>
+        </div>
+        <div class="option" id="depNo">
+          <input type="radio" name="depOption" value="no"><div><div class="option-title">No</div></div>
+        </div>
+
+        <button id="continueBtn2">Continue</button>
+      </div>
+
+      <!-- Screen 3: Income Type -->
+      <div id="screen3" class="screen">
+        <div class="icon"><img class="icon-img" src="donna.png" alt="Donna assistant"></div>
+        <h1>How did you make money in 2024?</h1>
+
+        <div class="option" id="incW2">
+          <input type="radio" name="incType" value="w2">
+          <div><div class="option-title"> Only Employee </div><div class="option-desc">I worked as an employee and got W-2s</div></div>
+        </div>
+        <div class="option" id="incSelf">
+          <input type="radio" name="incType" value="self">
+          <div><div class="option-title">Self-employed / freelance</div><div class="option-desc">Uber, Fiverr, Etsy, 1099, etc.</div></div>
+        </div>
+
+        <button id="continueBtn3">Continue</button>
+      </div>
+
+      <!-- Screen NS: Not supported -->
+      <div id="screenNS" class="screen">
+        <div class="icon"><img class="icon-img" src="donna.png" alt="Donna assistant"></div>
+        <h1>We’re almost there!</h1>
+        <p class="sub">This isn’t supported yet in this version. We’re on it.</p>
+        <button id="endSession">Finish</button>
+      </div>
+
+      <!-- Screen 4: W-2 (upload OR manual) -->
+      <div id="screen4" class="screen">
+        <div class="icon"><img class="icon-img" src="donna.png" alt="Donna assistant"></div>
+        <h1>How much did you earn in 2024?</h1>
+        <p class="sub">Include the total from all jobs you worked at in 2024.</p>
+        <div class="option" id="w4OptUpload">
+          <input type="radio" name="w4Mode" value="upload">
+          <div>
+            <div class="option-title">Upload my W-2s</div>
+            <div class="option-desc">Faster and more accurate. You can add multiple files.</div>
+          </div>
+        </div>
+        <div class="option" id="w4OptManual">
+          <input type="radio" name="w4Mode" value="manual">
+          <div>
+            <div class="option-title">Enter totals myself</div>
+            <div class="option-desc">Quick estimate if you don’t have the forms.</div>
+          </div>
+        </div>
+
+        <!-- Upload multiple W-2s -->
+        <div id="w4UploadBox" class="upload-box" style="display:none;">
+          <label for="w4Files" class="upload-area" id="w4UploadArea">
+            <div class="upload-icon">📄</div>
+            <p id="w4UploadPrompt">Drag & drop your W-2s here or click to upload</p>
+            <p class="upload-sub" id="w4UploadSub">PDF/JPG/PNG · multiple files allowed</p>
+            <span class="upload-btn" id="w4UploadBtnLabel">Choose Files</span>
+            <p class="upload-sub" id="w4UploadSummary" style="display:none;margin-top:10px;"></p>
+          </label>
+          <input type="file" id="w4Files" accept=".pdf,.jpg,.png" multiple hidden>
+        </div>
+
+        <!-- Manual totals -->
+        <div id="w4ManualBox" class="input-area" style="display:none;">
+          <label for="w4Wages">Total 2024 wages (USD)</label>
+          <input type="number" id="w4Wages" placeholder="25,000">
+          <div class="input-hint">Estimated federal tax withheld: <strong id="w4WithheldEst">$0</strong></div>
+        </div>
+
+        <button id="continueBtn4">See my refund</button>
+      </div>
+
+      <!-- FINAL: Estimated refund -->
+      <div id="screenFinal" class="screen">
+        <div class="icon"><img class="icon-img" src="donna.png" alt="Donna assistant"></div>
+        <h1>Your estimated tax refund</h1>
+
+        <div class="refund-card fade-in" id="refundCard">
+          <div class="refund-amount"><span class="range" id="refundRange">$0 – $0</span></div>
+          <div class="micro">This is based on what you shared with us.</div>
+          <div class="highlights" id="hlList"></div>
+          <div class="triple-note" id="tripleNote" style="display:none;"></div>
+          <button id="fileReturnBtn">Claim my refund</button>
+          <div class="disclaimer">This is an estimate only and not tax advice.</div>
+        </div>
+      </div>
+
+      <!-- Screen 6: Sold stocks/crypto? -->
+      <div id="screen6" class="screen">
+        <div class="icon"><img class="icon-img" src="donna.png" alt="Donna assistant"></div>
+        <h1>Great! Just 3 quick questions:<br>Did you sell any stocks or crypto in 2024?</h1>
+
+        <div class="option" id="sellYes">
+          <input type="radio" name="sellOption" value="yes"><div><div class="option-title">Yes</div></div>
+        </div>
+        <div class="option" id="sellNo">
+          <input type="radio" name="sellOption" value="no"><div><div class="option-title">No</div></div>
+        </div>
+
+        <button id="continueBtn6">Continue</button>
+      </div>
+
+      <!-- Screen 8: 1095-A -->
+      <div id="screen8" class="screen">
+        <div class="icon"><img class="icon-img" src="donna.png" alt="Donna assistant"></div>
+        <h1>Did you get a 1095-A health form from the Marketplace?</h1>
+
+        <div class="option" id="a1095Yes">
+          <input type="radio" name="a1095Option" value="yes"><div><div class="option-title">Yes</div></div>
+        </div>
+        <div class="option" id="a1095No">
+          <input type="radio" name="a1095Option" value="no"><div><div class="option-title">No</div></div>
+        </div>
+
+        <button id="continueBtn8">Continue</button>
+      </div>
+
+      <!-- Screen 9: Citizenship / GC -->
+      <div id="screen9" class="screen">
+        <div class="icon"><img class="icon-img" src="donna.png" alt="Donna assistant"></div>
+        <h1>Are you a U.S. citizen or green card holder?</h1>
+        <div class="option" id="citYes">
+          <input type="radio" name="citOption" value="yes"><div><div class="option-title">Yes</div></div>
+        </div>
+        <div class="option" id="citNo">
+          <input type="radio" name="citOption" value="no"><div><div class="option-title">No</div></div>
+        </div>
+
+        <button id="continueBtn9">Continue</button>
+      </div>
+
+      <!-- ScreenEnd: email notify -->
+      <div id="screenEnd" class="screen">
+        <div class="icon"><img class="icon-img" src="donna.png" alt="Donna assistant"></div>
+        <h1>Thanks for trying us!</h1>
+        <p class="sub">We’ll let you know as soon as this is available.</p>
+
+        <div class="input-area" style="text-align:center;">
+          <label for="notifyEmail" style="text-align:left;">Get notified when it’s live (optional)</label>
+          <input type="email" id="notifyEmail" placeholder="you@example.com">
+          <div class="input-hint" style="text-align:left;">We’ll email you when it’s available.</div>
+        </div>
+
+        <button id="notifyBtn">Notify me</button>
+      </div>
+    </div>
+
+    <!-- Toast + Confetti (app scope) -->
+    <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+    <div id="confetti" class="confetti" aria-hidden="true"></div>
+  </section>
+
+  <script>
+    /* -----------------
+       App state & helpers (unchanged logic, scoped to #app DOM)
+       ----------------- */
+    const appRoot = document.getElementById('app');
+
+    const appState = {
+      tuition: { mode:null, amount:0 },
+      dependent: null,
+      incomeType: null,       // 'w2' | 'self'
+      w2: { mode:'manual', wages:0, withheld:0, uploaded:false },
+      soldSecurities: null,   // 'yes' | 'no'
+      has1095A: null,         // 'yes' | 'no'
+      citizenOrGC: null       // 'yes' | 'no'
+    };
+
+    const toastEl=document.getElementById('toast'); let toastTimer=null;
+    function showToast(msg,v='success',d=3000){toastEl.textContent=msg;toastEl.className=`toast show ${v}`;clearTimeout(toastTimer);toastTimer=setTimeout(()=>toastEl.classList.remove('show'),d);}
+
+    function go(from,to){document.getElementById(from).classList.remove('active');document.getElementById(to).classList.add('active');window.scrollTo({top:appRoot.offsetTop-70,behavior:'smooth'});} // scroll to app on screen change
+    function toggleBtn(btn,on){if(on){btn.classList.add('active');btn.disabled=false;}else{btn.classList.remove('active');btn.disabled=true;}}
+    function humanSize(b){if(b<1024)return b+' B';const u=['KB','MB','GB'];let i=-1;do{b/=1024;++i;}while(b>=1024&&i<u.length-1);return b.toFixed(1)+' '+u[i];}
+    function fmtMoney(n){return '$'+Number(Math.max(0,Math.round(n))).toLocaleString();}
+
+    /* ---------- Screen 1: Tuition ---------- */
+    const optUpload=document.getElementById('optUpload'),optManual=document.getElementById('optManual'),manualField=document.getElementById('manualField'),uploadField=document.getElementById('uploadField'),uploadArea=document.getElementById('uploadArea'),fileUpload=document.getElementById('fileUpload'),continueBtn1=document.getElementById('continueBtn1'),tuitionAmount=document.getElementById('tuitionAmount'),radios1=document.querySelectorAll('input[name="tuitionOption"]'),uploadBtnLabel=document.getElementById('uploadBtnLabel'),uploadFileName=document.getElementById('uploadFileName'),uploadPrompt=document.getElementById('uploadPrompt'),uploadSub=document.getElementById('uploadSub');
+
+    function resetOptions1(){optUpload.classList.remove('active');optManual.classList.remove('active');manualField.style.display="none";uploadField.style.display="none";}
+    radios1.forEach(r=>{r.addEventListener('change',()=>{resetOptions1();if(r.value==='upload'){optUpload.classList.add('active');uploadField.style.display='block';appState.tuition.mode='upload';}if(r.value==='manual'){optManual.classList.add('active');manualField.style.display='block';appState.tuition.mode='manual';}validateForm1();});});
+    tuitionAmount.addEventListener('input',()=>{appState.tuition.amount=Number(tuitionAmount.value||0);validateForm1();});
+    function validateForm1(){const sel=document.querySelector('input[name="tuitionOption"]:checked');let v=false;if(sel){if(sel.value==='upload'&&fileUpload.files.length>0)v=true;else if(sel.value==='manual'&&tuitionAmount.value.trim()!=='')v=true;}toggleBtn(continueBtn1,v);}  
+    function updateUploadUI(){if(fileUpload.files&&fileUpload.files.length>0){const f=fileUpload.files[0];uploadFileName.textContent=`Selected: ${f.name} (${humanSize(f.size)})`;uploadFileName.style.display='block';uploadBtnLabel.textContent='Replace File';uploadPrompt.textContent='File selected — you can replace it anytime';uploadSub.textContent='You can replace it anytime.';}else{uploadFileName.style.display='none';uploadBtnLabel.textContent='Choose File';uploadPrompt.textContent='Drag & drop or click to upload your 1098-T';uploadSub.textContent='PDF/JPG/PNG · up to 10 MB';}}
+    uploadArea.addEventListener('dragover',e=>{e.preventDefault();uploadArea.classList.add('dragover');});
+    uploadArea.addEventListener('dragleave',()=>uploadArea.classList.remove('dragover'));
+    uploadArea.addEventListener('drop',e=>{e.preventDefault();uploadArea.classList.remove('dragover');if(e.dataTransfer.files.length>0){try{fileUpload.files=e.dataTransfer.files;}catch(_){ }updateUploadUI();validateForm1();}});
+    fileUpload.addEventListener('change',()=>{updateUploadUI();validateForm1();});
+    continueBtn1.addEventListener('click',()=>{if(!continueBtn1.classList.contains('active'))return;go('screen1','screen2');});
+
+    /* ---------- Screen 2: Dependent ---------- */
+    const depYes=document.getElementById('depYes'),depNo=document.getElementById('depNo'),radios2=document.querySelectorAll('input[name="depOption"]'),continueBtn2=document.getElementById('continueBtn2');
+    function resetOptions2(){depYes.classList.remove('active');depNo.classList.remove('active');}
+    radios2.forEach(r=>{r.addEventListener('change',()=>{resetOptions2();if(r.value==='yes'){depYes.classList.add('active');appState.dependent='yes';}if(r.value==='no'){depNo.classList.add('active');appState.dependent='no';}toggleBtn(continueBtn2,true);});});
+    toggleBtn(continueBtn2,false);
+    continueBtn2.addEventListener('click',()=>{if(!continueBtn2.classList.contains('active'))return;go('screen2','screen3');});
+
+    /* ---------- Screen 3: Income Type ---------- */
+    const incW2=document.getElementById('incW2'),incSelf=document.getElementById('incSelf'),radiosInc=document.querySelectorAll('input[name="incType"]'),continueBtn3=document.getElementById('continueBtn3');
+    function resetOptions3(){incW2.classList.remove('active');incSelf.classList.remove('active');}
+    radiosInc.forEach(r=>{r.addEventListener('change',()=>{resetOptions3();if(r.value==='w2'){incW2.classList.add('active');appState.incomeType='w2';}if(r.value==='self'){incSelf.classList.add('active');appState.incomeType='self';}toggleBtn(continueBtn3,true);});});
+    toggleBtn(continueBtn3,false);
+    continueBtn3.addEventListener('click',()=>{if(!continueBtn3.classList.contains('active'))return;const t=document.querySelector('input[name="incType"]:checked').value;if(t==='self'){go('screen3','screenNS');}else{go('screen3','screen4');}});
+
+    /* ---------- Screen NS: Not supported ---------- */
+    const endSessionBtn=document.getElementById('endSession');endSessionBtn.classList.add('active');endSessionBtn.disabled=false;endSessionBtn.addEventListener('click',()=>go('screenNS','screenEnd'));
+
+    /* ---------- Screen 4: tiles (upload OR manual) ---------- */
+    const w4OptUpload = document.getElementById('w4OptUpload');
+    const w4OptManual = document.getElementById('w4OptManual');
+    const w4ModeRadios = document.querySelectorAll('input[name="w4Mode"]');
+
+    const w4UploadBox = document.getElementById('w4UploadBox');
+    const w4UploadArea = document.getElementById('w4UploadArea');
+    const w4Files = document.getElementById('w4Files');
+    const w4UploadPrompt = document.getElementById('w4UploadPrompt');
+    const w4UploadSub = document.getElementById('w4UploadSub');
+    const w4UploadBtnLabel = document.getElementById('w4UploadBtnLabel');
+    const w4UploadSummary = document.getElementById('w4UploadSummary');
+
+    const w4ManualBox = document.getElementById('w4ManualBox');
+    const w4Wages = document.getElementById('w4Wages');
+    const w4WithheldEst = document.getElementById('w4WithheldEst');
+
+    const continueBtn4 = document.getElementById('continueBtn4');
+
+    function resetW4(){
+      w4OptUpload.classList.remove('active'); w4OptManual.classList.remove('active');
+      w4UploadBox.style.display = 'none'; w4ManualBox.style.display = 'none';
+    }
+    w4ModeRadios.forEach(r=>{
+      r.addEventListener('change', ()=>{
+        resetW4();
+        if(r.value==='upload'){ w4OptUpload.classList.add('active'); w4UploadBox.style.display='block'; appState.w2.mode='upload'; }
+        if(r.value==='manual'){ w4OptManual.classList.add('active'); w4ManualBox.style.display='block'; appState.w2.mode='manual'; }
+        validateW4();
+      });
+    });
+
+    function estimateWithholdingFromWages(total){ return Math.max(0, total * 0.09); } // ~midpoint
+    function updateManualEst(){
+      const wages = Number(w4Wages.value || 0);
+      const est = Math.round(estimateWithholdingFromWages(wages));
+      w4WithheldEst.textContent = '$' + est.toLocaleString();
+      appState.w2.wages = wages;
+      appState.w2.withheld = est;
+    }
+    w4Wages.addEventListener('input', ()=>{ updateManualEst(); validateW4(); });
+
+    function updateW4UploadUI(){
+      const count = w4Files.files ? w4Files.files.length : 0;
+      if(count>0){
+        let totalBytes=0; const names=[];
+        for(let i=0;i<count;i++){ const f=w4Files.files[i]; totalBytes+=f.size; names.push(f.name); }
+        w4UploadSummary.textContent = `${count} file(s) selected – total ${humanSize(totalBytes)}: ${names.slice(0,3).join(', ')}${names.length>3?' …':''}`;
+        w4UploadSummary.style.display='block';
+        w4UploadBtnLabel.textContent='Replace Files';
+        w4UploadPrompt.textContent='Files selected';
+        w4UploadSub.textContent='You can replace them anytime.';
+        appState.w2.uploaded = true;
+      }else{
+        w4UploadSummary.style.display='none';
+        w4UploadBtnLabel.textContent='Choose Files';
+        w4UploadPrompt.textContent='Drag & drop your W-2s here or click to upload';
+        w4UploadSub.textContent='PDF/JPG/PNG · multiple files allowed';
+        appState.w2.uploaded = false;
+      }
+    }
+    w4UploadArea.addEventListener('dragover', e=>{ e.preventDefault(); w4UploadArea.classList.add('dragover'); });
+    w4UploadArea.addEventListener('dragleave', ()=> w4UploadArea.classList.remove('dragover'));
+    w4UploadArea.addEventListener('drop', e=>{
+      e.preventDefault(); w4UploadArea.classList.remove('dragover');
+      if(e.dataTransfer.files.length>0){ try{ w4Files.files = e.dataTransfer.files; }catch(_){ } updateW4UploadUI(); validateW4(); }
+    });
+    w4Files.addEventListener('change', ()=>{ updateW4UploadUI(); validateW4(); });
+
+    function validateW4(){
+      const mode = document.querySelector('input[name="w4Mode"]:checked')?.value;
+      let ok = false;
+      if(mode==='upload'){
+        ok = w4Files.files && w4Files.files.length>0;
+      }else if(mode==='manual'){
+        ok = Number(w4Wages.value||0) > 0; // withholding is auto-estimated
+      }
+      toggleBtn(continueBtn4, !!ok);
+    }
+    validateW4();
+
+    continueBtn4.addEventListener('click', ()=>{
+      if(!continueBtn4.classList.contains('active')) return;
+      if(appState.w2.mode==='upload'){
+        showToast(`Great — ${w4Files.files.length} W-2 file(s) ready to go.`, 'success');
+      }
+      go('screen4','screenFinal');
+      computeAndRenderRefund();
+      launchConfetti(24);
+    });
+
+    /* ---------- FINAL: Refund ---------- */
+    const fileReturnBtn=document.getElementById('fileReturnBtn');
+    fileReturnBtn.addEventListener('click',()=>{if(!fileReturnBtn.classList.contains('active'))return;go('screenFinal','screen6');});
+
+    function computeAndRenderRefund(){
+      const tuition = Number(appState.tuition.amount||0);
+      const wages   = Number(appState.w2.wages||0);
+      const withheld= Number(appState.w2.withheld||0);
+
+      // Demo formula
+      const tuitionCap = Math.min(tuition,10000);
+      let base = withheld - 0.10*wages + 0.20*tuitionCap;
+      if(!isFinite(base)||isNaN(base)) base=0; base=Math.max(0,base);
+
+      const jitter=(Math.random()*0.06)-0.03, mid=Math.max(0,base*(1+jitter));
+      let low=Math.round(mid*0.88), high=Math.round(mid*1.12);
+      if(mid<80){ low=Math.max(0,Math.round(mid*0.6)); high=Math.round(mid+120); }
+      if(high<low)[low,high]=[high,low];
+      document.getElementById('refundRange').textContent=`${fmtMoney(low)} – ${fmtMoney(high)}`;
+
+      const threeTotal=Math.round(mid*3);
+      const tripleNote=document.getElementById('tripleNote');
+      if (threeTotal > 0) {
+        tripleNote.style.display = 'block';
+        tripleNote.innerHTML = `You can still claim each of the last 3 years — that’s about <strong>${fmtMoney(threeTotal)}</strong> total.`;
+      } else {
+        tripleNote.style.display = 'none';
+      }
+      const hl=[]; if(appState.tuition.mode==='manual'&&tuition>0)hl.push('Tuition entered'); if(appState.w2.uploaded)hl.push('W-2 uploaded'); if(wages>0)hl.push('W-2 wages added');
+      const hlList=document.getElementById('hlList'); hlList.innerHTML=''; hl.slice(0,4).forEach(t=>{const s=document.createElement('span');s.className='chip';s.textContent=t;hlList.appendChild(s);});
+
+      toggleBtn(fileReturnBtn,true); fileReturnBtn.classList.add('pulse');
+    }
+
+    /* ---------- Screen 6: Sold stocks/crypto? ---------- */
+    const sellYes=document.getElementById('sellYes'),sellNo=document.getElementById('sellNo'),sellRadios=document.querySelectorAll('input[name="sellOption"]'),continueBtn6=document.getElementById('continueBtn6');
+    function resetSell(){sellYes.classList.remove('active');sellNo.classList.remove('active');}
+    sellRadios.forEach(r=>{r.addEventListener('change',()=>{resetSell();if(r.value==='yes'){sellYes.classList.add('active');appState.soldSecurities='yes';}if(r.value==='no'){sellNo.classList.add('active');appState.soldSecurities='no';}toggleBtn(continueBtn6,true);});});
+    toggleBtn(continueBtn6,false);
+    continueBtn6.addEventListener('click',()=>{if(!continueBtn6.classList.contains('active'))return;const v=document.querySelector('input[name="sellOption"]:checked')?.value;if(v==='yes'){go('screen6','screenNS');}else{go('screen6','screen8');}});
+
+    /* ---------- Screen 8: 1095-A ---------- */
+    const a1095Yes=document.getElementById('a1095Yes'),a1095No=document.getElementById('a1095No'),a1095Radios=document.querySelectorAll('input[name="a1095Option"]'),continueBtn8=document.getElementById('continueBtn8');
+    function resetA1095(){a1095Yes.classList.remove('active');a1095No.classList.remove('active');}
+    a1095Radios.forEach(r=>{r.addEventListener('change',()=>{resetA1095();if(r.value==='yes'){a1095Yes.classList.add('active');appState.has1095A='yes';}if(r.value==='no'){a1095No.classList.add('active');appState.has1095A='no';}toggleBtn(continueBtn8,true);});});
+    toggleBtn(continueBtn8,false);
+    continueBtn8.addEventListener('click',()=>{if(!continueBtn8.classList.contains('active'))return;const v=document.querySelector('input[name="a1095Option"]:checked')?.value;if(v==='yes'){go('screen8','screenNS');}else{go('screen8','screen9');}});
+
+    /* ---------- Screen 9: Citizen/GC ---------- */
+    const citYes=document.getElementById('citYes'),citNo=document.getElementById('citNo'),citRadios=document.querySelectorAll('input[name="citOption"]'),continueBtn9=document.getElementById('continueBtn9');
+    function resetCit(){citYes.classList.remove('active');citNo.classList.remove('active');}
+    citRadios.forEach(r=>{r.addEventListener('change',()=>{resetCit();if(r.value==='yes'){citYes.classList.add('active');appState.citizenOrGC='yes';}if(r.value==='no'){citNo.classList.add('active');appState.citizenOrGC='no';}toggleBtn(continueBtn9,true);});});
+    toggleBtn(continueBtn9,false);
+    continueBtn9.addEventListener('click',()=>{if(!continueBtn9.classList.contains('active'))return;const v=document.querySelector('input[name="citOption"]:checked')?.value;if(v==='no'){go('screen9','screenNS');}else{showToast('Submitted — we’ll be in touch soon.','success');}});
+
+    /* ---------- End screen notify ---------- */
+    const notifyEmail=document.getElementById('notifyEmail'),notifyBtn=document.getElementById('notifyBtn');
+    function isValidEmail(e){const re=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;return re.test(String(e).trim());}
+    function validateEmail(){toggleBtn(notifyBtn,isValidEmail(notifyEmail.value));}
+    notifyEmail.addEventListener('input',validateEmail);validateEmail();
+    notifyBtn.addEventListener('click',()=>{if(!notifyBtn.classList.contains('active'))return;showToast(`We’ll notify you at ${notifyEmail.value}.`,'success');notifyBtn.textContent='You’ll be notified';notifyBtn.classList.remove('active');notifyBtn.disabled=true;});
+
+    /* ---------- Confetti ---------- */
+    const confettiRoot=document.getElementById('confetti');
+    function launchConfetti(count=20){confettiRoot.innerHTML='';for(let i=0;i<count;i++){const piece=document.createElement('span');piece.style.left=Math.random()*100+'vw';piece.style.animationDelay=(Math.random()*0.4)+'s';piece.style.transform=`translateY(0) rotate(${Math.random()*180}deg)`;confettiRoot.appendChild(piece);}setTimeout(()=>{confettiRoot.innerHTML='';},2600);}    
+    
+  
+    function openApp(){
+      const landing = document.getElementById('landing');
+      const app = document.getElementById('app');
+      const header = document.querySelector('header');
+      if(landing) landing.style.display = 'none';
+      if(header) header.style.display = 'none';
+      if(app){ app.style.display = 'block'; document.body.classList.add('app-mode'); window.scrollTo({top:0, behavior:'instant'}); }
+    }
+    document.querySelectorAll('.nav-cta, #ctaStart').forEach(el=>{
+      el.addEventListener('click', e=>{ e.preventDefault(); openApp(); });
+    });
+  </script>
+</body>
+</html>
