@@ -300,8 +300,8 @@
    toggleBtn(continueBtn6,false);
    continueBtn6.addEventListener('click',()=>{
      if(!continueBtn6.classList.contains('active'))return;
-     const v=document.querySelector('input[name="sellOption"]:checked')?.value;
-     if(v==='yes'){go('screen6','screenNS');}else{go('screen6','screen8');}
+     const checked=document.querySelector('input[name="sellOption"]:checked')?.value;
+     if(checked==='yes'){go('screen6','screenNS');}else{go('screen6','screen8');}
    });
    
    /* ---------- Screen 8: 1095-A ---------- */
@@ -343,9 +343,129 @@
    continueBtn9.addEventListener('click',()=>{
      if(!continueBtn9.classList.contains('active'))return;
      const v=document.querySelector('input[name="citOption"]:checked')?.value;
-     if(v==='no'){go('screen9','screenNS');}
-     else{showToast('Submitted — we’ll be in touch soon.','success');}
+     if(v==='no'){
+       go('screen9','screenNS');
+     }else{
+       // go to the new Upload Missing Docs screen
+       renderMissingDocs();
+       go('screen9','screenUpload');
+     }
    });
+   
+   /* ---------- NEW: Upload Missing Docs ---------- */
+   const missingList = document.getElementById('missingList');
+   const missingIntro = document.getElementById('missingIntro');
+   const noMissingHint = document.getElementById('noMissingHint');
+   
+   const missingUploadArea = document.getElementById('missingUploadArea');
+   const missingFiles = document.getElementById('missingFiles');
+   const missingUploadPrompt = document.getElementById('missingUploadPrompt');
+   const missingUploadSub = document.getElementById('missingUploadSub');
+   const missingUploadBtnLabel = document.getElementById('missingUploadBtnLabel');
+   const missingUploadSummary = document.getElementById('missingUploadSummary');
+   
+   const submitMissingBtn = document.getElementById('submitMissingBtn');
+   
+   function computeMissingDocs(){
+     const req = [];
+     if(appState.tuition.mode === 'manual'){
+       req.push('1098-T (Tuition statement)');
+     }
+     if(appState.incomeType === 'w2' && appState.w2.mode === 'manual'){
+       req.push('W-2 form(s) from your employer(s)');
+     }
+     if(appState.soldSecurities === 'yes'){
+       req.push('1099-B / Crypto gains report');
+     }
+     if(appState.has1095A === 'yes'){
+       req.push('1095-A (Health Insurance Marketplace)');
+     }
+     return req;
+   }
+   
+   function renderMissingDocs(){
+     const req = computeMissingDocs();
+     missingList.innerHTML = '';
+     if(req.length === 0){
+       missingIntro.textContent = 'Great! We don’t see any required documents missing.';
+       noMissingHint.style.display = 'block';
+     }else{
+       missingIntro.textContent = 'To file your refund, please upload:';
+       noMissingHint.style.display = 'none';
+       req.forEach(text=>{
+         const li = document.createElement('li');
+         const check = document.createElement('span');
+         check.className='check';
+         check.textContent='•';
+         li.appendChild(check);
+         const span = document.createElement('span');
+         span.textContent = text;
+         li.appendChild(span);
+         missingList.appendChild(li);
+       });
+     }
+     resetMissingUploadUI();
+   }
+   
+   function resetMissingUploadUI(){
+     missingUploadSummary.style.display='none';
+     missingUploadBtnLabel.textContent='Choose Files';
+     missingUploadPrompt.textContent='Drag & drop or click to upload';
+     missingUploadSub.textContent='PDF/JPG/PNG · multiple files allowed';
+     missingFiles.value = '';
+   }
+   function updateMissingUploadUI(){
+     const count = missingFiles.files ? missingFiles.files.length : 0;
+     if(count>0){
+       let totalBytes=0; const names=[];
+       for(let i=0;i<count;i++){ const f=missingFiles.files[i]; totalBytes+=f.size; names.push(f.name); }
+       missingUploadSummary.textContent = `${count} file(s) selected – total ${humanSize(totalBytes)}: ${names.slice(0,3).join(', ')}${names.length>3?' …':''}`;
+       missingUploadSummary.style.display='block';
+       missingUploadBtnLabel.textContent='Replace Files';
+       missingUploadPrompt.textContent='Files selected';
+       missingUploadSub.textContent='You can replace them anytime.';
+       toggleBtn(submitMissingBtn, true);
+     }else{
+       resetMissingUploadUI();
+       toggleBtn(submitMissingBtn, false);
+     }
+   }
+   missingUploadArea.addEventListener('dragover', e=>{ e.preventDefault(); missingUploadArea.classList.add('dragover'); });
+   missingUploadArea.addEventListener('dragleave', ()=> missingUploadArea.classList.remove('dragover'));
+   missingUploadArea.addEventListener('drop', e=>{
+     e.preventDefault(); missingUploadArea.classList.remove('dragover');
+     if(e.dataTransfer.files.length>0){
+       try{ missingFiles.files = e.dataTransfer.files; }catch(_){ }
+       updateMissingUploadUI();
+     }
+   });
+   missingFiles.addEventListener('change', updateMissingUploadUI);
+   toggleBtn(submitMissingBtn, false);
+   
+   // Submit → go to choice screen (DIY vs We-file)
+   submitMissingBtn.addEventListener('click', ()=>{
+     if(!submitMissingBtn.classList.contains('active')) return;
+     showToast('Documents received. Almost done.','success');
+     go('screenUpload','screenChoice');
+   });
+   
+   /* ---------- Choice Screen (DIY vs We-file) ---------- */
+   const btnDownloadPDF = document.getElementById('btnDownloadPDF');
+   const btnWeFile = document.getElementById('btnWeFile');
+   
+   if (btnDownloadPDF) {
+     btnDownloadPDF.addEventListener('click', ()=>{
+       showToast('Generating your PDF…','info',2000);
+       // Example: window.location.href = '/ready-refund.pdf';
+       // Or: generateAndDownloadPDF(appState);
+     });
+   }
+   if (btnWeFile) {
+     btnWeFile.addEventListener('click', ()=>{
+       showToast('Great — we’ll file for you. Let’s collect payment.','success');
+       // Example: go('screenChoice','screenPayment'); or open Stripe Checkout
+     });
+   }
    
    /* ---------- End screen notify ---------- */
    const notifyEmail=document.getElementById('notifyEmail'),

@@ -214,6 +214,71 @@
         <button id="continueBtn9">Continue</button>
       </div>
 
+      <!-- NEW: Upload Missing Docs -->
+      <div id="screenUpload" class="screen">
+        <div class="icon"><img class="icon-img" src="donna.png" alt="Donna assistant"></div>
+        <h1>Upload the missing documents</h1>
+        <p class="sub" id="missingIntro">To file your refund, please upload:</p>
+
+        <ul class="missing-list" id="missingList"></ul>
+
+        <div class="upload-box">
+          <label for="missingFiles" class="upload-area" id="missingUploadArea">
+            <div class="upload-icon">📄</div>
+            <p id="missingUploadPrompt">Drag & drop or click to upload</p>
+            <p class="upload-sub" id="missingUploadSub">PDF/JPG/PNG · multiple files allowed</p>
+            <span class="upload-btn" id="missingUploadBtnLabel">Choose Files</span>
+            <p class="upload-sub" id="missingUploadSummary" style="display:none;margin-top:10px;"></p>
+          </label>
+          <input type="file" id="missingFiles" accept=".pdf,.jpg,.png" multiple hidden>
+        </div>
+
+        <button id="submitMissingBtn">Submit documents</button>
+        <p class="hint-row" id="noMissingHint" style="display:none;">Looks like you’ve got everything. You can still upload anything else you think we should have.</p>
+      </div>
+
+      <!-- NEW: Choice screen (DIY vs We-file) -->
+<div id="screenChoice" class="screen">
+  <div class="icon"><img class="icon-img" src="donna.png" alt="Donna assistant"></div>
+  <h1>How would you like to file?</h1>
+  <p class="sub">Pick what works best for you. You can change later.</p>
+
+  <div class="choice-grid">
+    <!-- DIY (Free) -->
+    <div class="choice-card">
+      <div class="badge free">FREE</div>
+      <h2 class="choice-title">Download a ready-to-file PDF</h2>
+      <p class="choice-desc">We’ll package your info into a PDF you can print and mail yourself.</p>
+      <ul class="choice-list">
+        <li>Ready-to-print forms & cover letter</li>
+        <li>Basic error checks</li>
+        <li>No cost</li>
+      </ul>
+      <button id="btnDownloadPDF" class="choice-cta">Download PDF</button>
+      <div class="tiny-note">You’ll get the PDF instantly.</div>
+    </div>
+
+    <!-- We file for you ($20) -->
+    <div class="choice-card highlight">
+      <div class="badge price">$20</div>
+      <h2 class="choice-title">We request your refund for you</h2>
+      <p class="choice-desc">Sit back. We’ll prepare, file, and keep you updated until it’s done.</p>
+      <ul class="choice-list">
+        <li>Full filing & submission</li>
+        <li>Status updates by email</li>
+        <li>Priority support</li>
+      </ul>
+      <button id="btnWeFile" class="choice-cta primary">File for me</button>
+      <div class="tiny-note">One-time. No hidden fees.</div>
+    </div>
+  </div>
+
+  <p class="micro" style="margin-top:18px;">
+    This is an estimate only and not tax advice. Your data is encrypted and kept private.
+  </p>
+</div>
+
+
       <!-- ScreenEnd: email notify -->
       <div id="screenEnd" class="screen">
         <div class="icon"><img class="icon-img" src="donna.png" alt="Donna assistant"></div>

@@ -62,7 +62,7 @@
   }
   .trust-row{ margin-top:22px; color:#666; font-size:14px; }
   
-  .spacer{ height:40vh; }
+  .divider{height:1px;background:#f1f1f1;margin:0}
   
   /* =====================
      App (namespaced)
@@ -128,8 +128,6 @@
   .app .confetti span:nth-child(5n){background:#ffa6d1;height:10px}
   @keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
   
-  .divider{height:1px;background:#f1f1f1;margin:0}
-  
   /* Mobile tweaks */
   @media (max-width:720px){
     .hero{ 
@@ -157,5 +155,92 @@
     background:#f9f9fb;
     font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
     color:#222;
+  }
+  
+  /* ===== Missing docs list ===== */
+  .missing-list{
+    list-style:none; padding:0; margin:10px 0 6px;
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .missing-list li{
+    display:flex; align-items:flex-start; gap:10px;
+    border:1px dashed #ffb8dd; background:#fff5fa; color:#444;
+    padding:10px 12px; border-radius:10px; font-size:.95rem;
+  }
+  .missing-list .check{
+    flex: 0 0 auto; margin-top:2px; width:22px; height:22px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-weight:800; background:#ff0583; color:#fff;
+  }
+  
+  /* ===== Choice screen (symmetry & polish) ===== */
+  .choice-grid{
+    display:grid;
+    gap:18px;
+    grid-template-columns:1fr;
+    align-items:stretch;
+  }
+  @media (min-width:760px){
+    .choice-grid{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+  }
+  .choice-card{
+    position:relative;
+    display:grid;
+    grid-template-rows:auto auto 1fr auto auto; /* title, desc, bullets, cta, note */
+    row-gap:10px;
+    padding:66px 22px 18px;
+    border:2px solid #ffd1e8;
+    border-radius:16px;
+    background:#fff;
+    height:100%;
+  }
+  .choice-card.highlight{
+    border-color:#ff9bcc;
+    box-shadow:0 6px 18px rgba(255,5,131,.08);
+  }
+  
+  /* Badges */
+  .badge{
+    position:absolute; top:14px; right:14px; z-index:2;
+    display:flex; align-items:center; justify-content:center;
+    height:28px; min-width:64px; padding:0 10px;
+    border-radius:999px; font-weight:800; font-size:.8rem;
+    background:#ffe6f2; color:#a30e5d; border:1px solid #ffc6df;
+  }
+  .badge.free{ background:#eef8ee; color:#177a3c; border-color:#bfe7c9; }
+  .badge.price{ background:#fff2fa; color:#a30e5d; border-color:#ffd1e8; }
+  
+  /* Titles / descriptions */
+  .choice-title{ margin:0; font-size:1.28rem; line-height:1.15; font-weight:800; text-align:center; }
+  .choice-desc{ margin:0; color:#555; line-height:1.55; text-align:center; min-height:72px; }
+  
+  /* Bullet lists */
+  .choice-list{
+    text-align:left;
+    margin:6px auto 12px;
+    padding-left:20px;
+    width:100%;           /* תמיד תופס רוחב מלא */
+    max-width:320px;      /* מגביל רוחב כדי לא להתפזר */
+    list-style:disc outside;
+  }
+  .choice-list li{ margin:7px 0; line-height:1.5; }
+  
+  /* CTA buttons */
+  .choice-cta{
+    white-space:nowrap;
+    width:100%; padding:14px; border-radius:10px; font-weight:800;
+    border:2px solid #ffd1e8; background:#fff; color:#a30e5d;
+    justify-self:center; align-self:end;
+    transition:background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .choice-cta:hover{ background:#fff5fa; }
+  .choice-cta:focus{ outline:3px solid rgba(255,5,131,.35); outline-offset:2px; }
+  .choice-cta.primary{ background:#ff0583; color:#fff; border-color:#ff0583; }
+  .choice-cta.primary:hover{ background:#e60088; }
+  .choice-cta.secondary{ background:#fff; color:#4a4a4a; border-color:#cfcfcf; }
+  .choice-cta.secondary:hover{ background:#f7f7f7; }
+  
+  .tiny-note{
+    margin:8px 0 0; color:#777; font-size:.82rem; text-align:center;
+    min-height:22px;
   }
   
